@@ -1,9 +1,9 @@
 {
-  "name": "localStore",
+  "name": "localstores",
   "files": [
     "lib"
   ],
-  "description": "Boilerplate to get started fast",
+  "description": "多端通用的缓存方案",
   "keywords": [
     "react",
     "rollup",
@@ -12,7 +12,7 @@
   ],
   "author": "shawn <xx090304@163.com> (https://github.com/xiangxiong)",
   "license": "MIT",
-  "version": "1.1.0",
+  "version": "1.0.0",
   "scripts": {
     "build": "rollup -c",
     "start": "rollup -c -w",
