@@ -1,67 +1,55 @@
 {
   "name": "localstores",
-  "files": [
-    "lib"
-  ],
-  "description": "多端通用的缓存方案",
-  "keywords": [
-    "react",
-    "rollup",
-    "node-sass",
-    "sass"
-  ],
-  "author": "shawn <xx090304@163.com> (https://github.com/xiangxiong)",
-  "license": "MIT",
-  "version": "1.0.0",
+  "version": "1.0.8",
+  "description": "多端缓存的方案",
+  "main": "lib/index.umd.js",
+  "module": "lib/index.esm.js",
   "scripts": {
-    "build": "rollup -c",
-    "start": "rollup -c -w",
-    "test": "jest --config ./jest.config.json",
-    "precommit": "lint-staged",
-    "storybook": "start-storybook -p 9009 -s assets",
-    "build-storybook": "build-storybook -s assets",
-    "deploy-storybook": "storybook-to-ghpages"
+    "test": "npm run jest",
+    "jest": "jest",
+    "mergetag": "node ./build/mergetag.js",
+    "build": "npm run rollup",
+    "release": "npm run changelog  && node ./build/release.js",
+    "rollup": "rollup --config build/rollup.config.js",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0 "
   },
-  "peerDependencies": {
-    "prop-types": "15.6.1",
-    "react": "16.3.1",
-    "react-dom": "16.4.0"
+  "keywords": [
+    "websql",
+    "localstorage",
+    "indexdb",
+    "cache"
+  ],
+  "files": [
+    "lib",
+    "src"
+  ],
+  "homepage": "https://github.com/xiangxiong/localStore",
+  "bugs": {
+    "url": "https://github.com/xiangxiong/localStore/issues"
   },
-  "devDependencies": {
-    "@dump247/storybook-state": "^1.5.0",
-    "@types/jest": "22.2.3",
-    "@types/react": "16.3.14",
-    "@types/react-dom": "16.0.5",
-    "@types/react-test-renderer": "16.0.1",
-    "classnames": "2.2.5",
-    "husky": "0.14.3",
-    "jest": "23.0.0",
-    "jest-css-modules": "1.1.0",
-    "lint-staged": "7.1.2",
-    "node-sass": "4.9.0",
-    "prettier": "1.12.1",
-    "react": "16.4.0",
-    "react-dom": "16.4.0",
-    "react-test-renderer": "16.4.0",
-    "rollup": "0.59.3",
-    "rollup-plugin-filesize": "1.5.0",
-    "rollup-plugin-node-resolve": "3.3.0",
-    "rollup-plugin-peer-deps-external": "2.1.1",
-    "rollup-plugin-postcss": "1.6.1",
-    "rollup-plugin-progress": "0.4.0",
-    "rollup-plugin-terser": "3.0.0",
-    "rollup-plugin-typescript2": "0.14.0",
-    "rollup-plugin-visualizer": "0.6.0",
-    "ts-jest": "22.4.6",
-    "typescript": "2.8.3"
-  },
-  "lint-staged": {
-    "*.{ts,tsx,js,json,css,md}": [
-      "prettier --write",
-      "git add"
-    ]
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xiangxiong/localStore"
   },
   "dependencies": {
-    "puppeteer": "^8.0.0"
-  }
+    "@babel/runtime": "^7.2.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.2.2",
+    "@babel/plugin-proposal-class-properties": "^7.3.4",
+    "@babel/plugin-transform-runtime": "^7.2.0",
+    "@babel/preset-env": "^7.2.3",
+    "@babel/runtime-corejs2": "^7.13.10",
+    "conventional-changelog": "^3.0.6",
+    "conventional-changelog-cli": "^2.0.12",
+    "execa": "^1.0.0",
+    "jest": "^24.1.0",
+    "rollup": "^1.4.1",
+    "rollup-plugin-babel": "^4.3.2",
+    "rollup-plugin-commonjs": "^9.2.0",
+    "rollup-plugin-node-resolve": "^4.0.1"
+  },
+  "author": "shawn",
+  "license": "Apache"
 }

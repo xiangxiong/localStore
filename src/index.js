@@ -1,5 +1,4 @@
 import localStorage from './localstore';
 
-export {
-  localStorage
-}
+export default new localStorage();
+
