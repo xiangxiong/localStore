@@ -46,6 +46,10 @@ function extend(){
 
 class LocalStore{
 
+  test(){
+    return '2';
+  }
+
   constructor(options){
     for(let driverTypeKey in DefaultDrivers){
       if(DefaultDrivers.hasOwnProperty(driverTypeKey)){
@@ -128,4 +132,4 @@ class LocalStore{
   }
 }
 
-export default LocalStore;
+export default new LocalStore();

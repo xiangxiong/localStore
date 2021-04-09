@@ -1,4 +1,6 @@
-import localStorage from './localstore';
-
-export default new localStorage();
-
+class Test{
+  add(){
+    return '2'
+  }
+}
+export default new Test();
