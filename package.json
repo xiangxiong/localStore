@@ -1,6 +1,6 @@
 {
   "name": "localstores",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "多端缓存的方案",
   "main": "lib/index.umd.js",
   "module": "lib/index.esm.js",
@@ -20,8 +20,7 @@
     "cache"
   ],
   "files": [
-    "lib",
-    "src"
+    "lib"
   ],
   "homepage": "https://github.com/xiangxiong/localStore",
   "bugs": {
