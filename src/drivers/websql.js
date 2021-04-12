@@ -145,14 +145,14 @@ function getItem(tableName){
       self._dbInfo.transaction((ts)=>{
         try{
           ts.executeSql('select * from '+ tableName, [], function (ts, result) {
-            var result = [];
+            var rst = [];
             if (result) {
                for (var i = 0; i < result.rows.length; i++){
-                  result.push(result.rows.item(i));
+                rst.push(result.rows.item(i));
                   // console.info((result.rows.item(i)));
                }
             }
-            resolve(result);
+            resolve(rst);
           },function(ts, message) {
               console.info("查询数据失败！"+message);
           });
@@ -170,7 +170,7 @@ function removeItem(key,tableName,callback){
   var promise = new Promise(function (resolve, reject) {
     self._dbInfo.transaction((ts)=>{
       try {
-        ts.executeSql(`DELETE FROM ${tableName} WHERE key = ?`,[key],function(){
+        ts.executeSql(`DELETE FROM ${tableName} WHERE id = ?`,[key],function(){
           resolve();
         },function(t,error){
           reject(error);
