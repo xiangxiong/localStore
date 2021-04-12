@@ -1,6 +1,6 @@
 {
   "name": "localstores",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "多端缓存的方案",
   "main": "lib/index.umd.js",
   "module": "lib/index.esm.js",

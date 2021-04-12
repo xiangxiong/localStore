@@ -1,4 +1,3 @@
-
 function createDbTable(t,dbInfo,callback, errorCallback){
   t.executeSql(
     `CREATE TABLE IF NOT EXISTS ${dbInfo.storeName} ` + '(key varchar(50), value varchar(50))',
@@ -52,7 +51,6 @@ function _initStorage(options){
  * @returns 
  */
 function createExtTable(tableName,createTableField,onSuccess,onError,context){
-  console.log('context',context);
   var extTablePromise = new Promise(function(resolve, reject) {
     try{
       context.transaction((ts, result)=>{
@@ -124,10 +122,10 @@ function extSetItem(tableName,tableField,createTableField,onSuccess,onError){
  * @param {*} onSuccess 成功回调
  * @param {*} onError   错误回调
  */
-function setItem(key,value,onSuccess,onError){
+function setItem(key,value,tableName,onSuccess,onError){
   this._dbInfo.transaction((ts)=>{
     let sql =  `INSERT OR REPLACE INTO ${
-      this._dbInfo.storeName
+      tableName
     } ` + '(key, value) VALUES (?, ?)';
     ts.executeSql(sql, [key,value], function (ts, result){
       onSuccess(ts,result);
@@ -142,18 +140,48 @@ function setItem(key,value,onSuccess,onError){
  * @param {*} tableName 表名
  */
 function getItem(tableName){
-  this._dbInfo.transaction((ts)=>{
-    ts.executeSql('select * from '+ tableName, [], function (ts, result) {
-      if (result) {
-         for (var i = 0; i < result.rows.length; i++) {
-             console.info((result.rows.item(i)));
-         }
+    var self = this;
+    var promise = new Promise(function (resolve, reject){
+      self._dbInfo.transaction((ts)=>{
+        try{
+          ts.executeSql('select * from '+ tableName, [], function (ts, result) {
+            var result = [];
+            if (result) {
+               for (var i = 0; i < result.rows.length; i++){
+                  result.push(result.rows.item(i));
+                  // console.info((result.rows.item(i)));
+               }
+            }
+            resolve(result);
+          },function(ts, message) {
+              console.info("查询数据失败！"+message);
+          });
+        }
+        catch(error){
+          reject(error);
+        }
+      });
+    });
+    return promise;
+}
+
+function removeItem(key,tableName,callback){
+  var self = this;
+  var promise = new Promise(function (resolve, reject) {
+    self._dbInfo.transaction((ts)=>{
+      try {
+        ts.executeSql(`DELETE FROM ${tableName} WHERE key = ?`,[key],function(){
+          resolve();
+        },function(t,error){
+          reject(error);
+        });
       }
-      return result;
-    }, function (ts, message) {
-        console.info("查询数据失败！"+message);
+      catch(error){
+        reject(error);
+      }
     });
   });
+  return promise;
 }
 
 var webSQLStorage = {
@@ -161,7 +189,8 @@ var webSQLStorage = {
   _initStorage: _initStorage,
   extSetItem: extSetItem,
   getItem: getItem,
-  setItem: setItem
+  setItem: setItem,
+  removeItem: removeItem
 };
 
 export default webSQLStorage;
