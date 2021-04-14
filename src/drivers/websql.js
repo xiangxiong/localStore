@@ -116,7 +116,9 @@ function extSetItem(tableName,tableField,createTableField,onSuccess,onError){
 }
 
 /**
+ * 
  * 设置存储项目
+ * 
  * @param {*} key 键
  * @param {*} value 值
  * @param {*} onSuccess 成功回调
@@ -165,6 +167,13 @@ function getItem(tableName){
     return promise;
 }
 
+/**
+ * 删除表
+ * @param {*} key 值
+ * @param {*} tableName 表名
+ * @param {*} callback  function 函数
+ * @returns 
+ */
 function removeItem(key,tableName,callback){
   var self = this;
   var promise = new Promise(function (resolve, reject) {
@@ -184,13 +193,127 @@ function removeItem(key,tableName,callback){
   return promise;
 }
 
+/**
+ * 更新数据表
+ * @param {*} tableName 表明.
+ * @param {*} dbParams  sql 拼接参数.
+ * @param {*} dbWhere   sql 条件.
+ * @returns promise 对象.
+ */
+function updateItem(tableName,dbParams,dbWhere){
+  var self = this;
+  var SQL  = 'UPDATE ' + tableName + ' SET';
+  var paramArr = new Array();
+  var paramStr = '';
+  var i = 0;
+
+  for(var k in dbParams){
+    if(typeof(dbParams[k]) !== 'number'){
+        dbParams[k] = '"'+dbParams[k]+'"';
+    }
+    paramArr[i] = k.toString()+'='+dbParams[k];
+    i++;
+  }
+
+  paramStr = paramStrArr.join(',');
+  SQL += paramStr;
+
+  if(dbWhere){
+    SQL += ' WHERE ';
+    var whereArr = new Array();
+    var whereStr = '';
+    var n=0;
+    for(var w in dbWhere){
+        if(typeof(dbWhere[w]) !=='number'){
+            dbWhere[n] = '"'+dbWhere[w]+'"';
+        }
+        whereArr[n] = w.toString()+'='+dbWhere[w];
+        n++;
+    }
+    whereStr = whereArr.join(" AND ");
+    SQL += whereStr;
+  }
+  console.log(' updateItem SQL', SQL);
+  var promise = new Promise(function (resolve, reject) {
+    self._dbInfo.transaction((ts)=>{
+      try{
+        ts.executeSql(SQL,[],function (ts, result){
+          resolve(true);
+        }, function(t, error){
+          resolve(false);
+        })
+      }
+      catch(error){
+        reject(false);
+      }
+    });
+  });
+
+  return promise;
+}
+
+/**
+ * 清空数据表
+ * @param {*} tableName 表名
+ * @returns 
+ */
+function truncateItem(tableName){
+  if(!tableName){
+    console.log('ERROR: Table Name is Null');
+    return false;
+  }
+  var self = this;
+  function _TRUNCATE(tableName){
+    self._dbInfo.transaction(function (ts){
+      ts.executeSql('DELETE TABLE' + tableName);
+    },[], function (ts, result){
+      console.log('DELETE TABLE' + tableName);
+      return true;
+    }, function(t, error){
+      console.log(error);
+      return false;
+    })
+  }
+  _TRUNCATE(tableName);
+}
+
+
+/**
+ * 删除数据表
+ * @param {*} tableName  表名
+ * @returns 
+ */
+function dropItem(tableName){
+
+  if(!tableName){
+    console.log('ERROR: Table Name is Null');
+    return false;
+  }
+  var self = this;
+  function _drop(tableName){
+    self._dbInfo.transaction(function (ts){
+      ts.executeSql('DROP TABLE' + tableName);
+    },[], function (ts, result){
+      console.log('DROP TABLE' + tableName);
+      return true;
+    }, function (t, error){
+      console.log('error' + error);
+      return false;
+    });
+  }
+  _drop(tableName);
+}
+
 var webSQLStorage = {
   _driver: 'webSQLStorage',
   _initStorage: _initStorage,
   extSetItem: extSetItem,
   getItem: getItem,
   setItem: setItem,
-  removeItem: removeItem
+  removeItem: removeItem,
+  updateItem: updateItem,
+  truncateItem: truncateItem,
+  dropItem: dropItem
 };
 
 export default webSQLStorage;
