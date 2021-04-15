@@ -258,23 +258,31 @@ function updateItem(tableName,dbParams,dbWhere){
  * @returns 
  */
 function truncateItem(tableName){
-  if(!tableName){
+  if (!tableName) {
     console.log('ERROR: Table Name is Null');
     return false;
   }
   var self = this;
-  function _TRUNCATE(tableName){
-    self._dbInfo.transaction(function (ts){
-      ts.executeSql('DELETE TABLE' + tableName);
-    },[], function (ts, result){
-      console.log('DELETE TABLE' + tableName);
-      return true;
-    }, function(t, error){
-      console.log(error);
-      return false;
-    })
-  }
-  _TRUNCATE(tableName);
+  var promise = new Promise(function (resolve, reject) {
+    try{
+      self._dbInfo.transaction(function (ts) {
+        ts.executeSql('delete from ' + tableName,[],function (ts, result){
+          console.log('删除表成功');
+          resolve(true);
+        });
+      }, [], function (ts, result) {
+        console.log('DELETE TABLE' + tableName);
+        resolve(true);
+      }, function (t, error) {
+        reject(error);
+        console.log(error);
+      });
+    }
+    catch(error){
+      reject(error);
+    }
+  });
+  return promise;
 }
 
 
@@ -289,7 +297,9 @@ function dropItem(tableName){
     console.log('ERROR: Table Name is Null');
     return false;
   }
+
   var self = this;
+
   function _drop(tableName){
     self._dbInfo.transaction(function (ts){
       ts.executeSql('DROP TABLE' + tableName);
@@ -301,6 +311,7 @@ function dropItem(tableName){
       return false;
     });
   }
+  
   _drop(tableName);
 }
 
