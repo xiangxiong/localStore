@@ -74,7 +74,38 @@ description
 
 # 对 websql 的扩展方法支持.
 
+
 对使用者需要掌握一定的 Sql 语法能力.
+
+websql 使用示例:
+```
+import React,{useEffect} from 'react';
+import LocalStore from 'localstores';
+
+function App() {
+  useEffect(()=>{
+    const init = async () =>{
+      LocalStore.setDriver(LocalStore.WEBSQL);
+      LocalStore.extSetItem('tb_test', {netName:'222333', targetVolume:'test', adjustVolume:'222', lastTargetVolume:'222' },
+        '(netName varchar(50),targetVolume varchar(40),adjustVolume varchar(40),lastTargetVolume varchar(40))', function (err) {
+          console.log('err', err);
+        }, function (err){
+          console.log('err', err);
+        });
+      const rst = await LocalStore.getItem('tb_test');
+      console.log('rst',rst);
+      LocalStore.updateItem('tb_test',{targetVolume:'test'},{netName:'网点'});
+    }
+    init();
+  },[]);
+
+  return (
+    <></>
+  );
+}
+
+export default App;
+```
 
 extSetItem
 
