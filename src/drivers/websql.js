@@ -193,6 +193,7 @@ function removeItem(key,tableName,callback){
   return promise;
 }
 
+
 /**
  * 更新数据表
  * @param {*} tableName 表明.
@@ -200,55 +201,51 @@ function removeItem(key,tableName,callback){
  * @param {*} dbWhere   sql 条件.
  * @returns promise 对象.
  */
-function updateItem(tableName,dbParams,dbWhere){
+ function updateItem(tableName, dbParams, dbWhere) {
   var self = this;
-  var SQL  = 'UPDATE ' + tableName + ' SET';
+  var SQL = 'UPDATE ' + tableName + ' SET ';
   var paramArr = new Array();
   var paramStr = '';
   var i = 0;
-
-  for(var k in dbParams){
-    if(typeof(dbParams[k]) !== 'number'){
-        dbParams[k] = '"'+dbParams[k]+'"';
+  for (var k in dbParams) {
+    if (typeof dbParams[k] !== 'number') {
+      dbParams[k] = '"' + dbParams[k] + '"';
     }
-    paramArr[i] = k.toString()+'='+dbParams[k];
+    paramArr[i] = k.toString() + '=' + dbParams[k];
     i++;
   }
-
-  paramStr = paramStrArr.join(',');
+  paramStr = paramArr.join(',');
   SQL += paramStr;
-
-  if(dbWhere){
+  if (dbWhere) {
     SQL += ' WHERE ';
     var whereArr = new Array();
     var whereStr = '';
-    var n=0;
-    for(var w in dbWhere){
-        if(typeof(dbWhere[w]) !=='number'){
-            dbWhere[n] = '"'+dbWhere[w]+'"';
-        }
-        whereArr[n] = w.toString()+'='+dbWhere[w];
-        n++;
+    var n = 0;
+    for (var w in dbWhere) {
+      if (typeof dbWhere[w] !== 'number') {
+        dbWhere[n] = '"' + dbWhere[w] + '"';
+      }
+
+      whereArr[n] = w.toString() + '=' + dbWhere[w];
+      n++;
     }
+
     whereStr = whereArr.join(" AND ");
     SQL += whereStr;
   }
-  console.log(' updateItem SQL', SQL);
   var promise = new Promise(function (resolve, reject) {
-    self._dbInfo.transaction((ts)=>{
-      try{
-        ts.executeSql(SQL,[],function (ts, result){
+    self._dbInfo.transaction(function (ts) {
+      try {
+        ts.executeSql(SQL, [], function (ts, result) {
           resolve(true);
-        }, function(t, error){
+        }, function (t, error) {
           resolve(false);
-        })
-      }
-      catch(error){
+        });
+      } catch (error) {
         reject(false);
       }
     });
   });
-
   return promise;
 }
 
