@@ -114,7 +114,7 @@ class LocalStore{
   driver(){
     return this._driver || null;
   }
-
+  
   getDriver(driverName){
     return DefinedDrivers[driverName];
   }

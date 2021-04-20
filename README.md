@@ -1,4 +1,4 @@
-# LOCALSTORES 多端缓存方案支持 - (小程序,h5,pc)
+# LOCALSTORES 跨端缓存的方案 -支持(小程序,h5,pc)
 ### 改进的离线存储
 localStores 是一个 JavaScript 库，通过简单类似 localStorage API 的异步存储来改进你的 Web 应用程序的离线体验。它能存储多种类型的数据，而不仅仅是字符串. 支持 IndexedDb 或 WebSql 以及 localStorage.
 

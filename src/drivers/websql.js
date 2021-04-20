@@ -299,9 +299,9 @@ function dropItem(tableName){
 
   function _drop(tableName){
     self._dbInfo.transaction(function (ts){
-      ts.executeSql('DROP TABLE' + tableName);
+      ts.executeSql('DROP TABLE ' + tableName);
     },[], function (ts, result){
-      console.log('DROP TABLE' + tableName);
+      console.log('DROP TABLE ' + tableName);
       return true;
     }, function (t, error){
       console.log('error' + error);
