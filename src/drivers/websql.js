@@ -151,16 +151,16 @@ function getItem(tableName){
             if (result) {
                for (var i = 0; i < result.rows.length; i++){
                 rst.push(result.rows.item(i));
-                  // console.info((result.rows.item(i)));
                }
             }
             resolve(rst);
           },function(ts, message) {
-              reject([]);
-              console.info("查询数据失败！"+message);
+              console.info("[异常]:"+message);
+              reject(message);
           });
         }
         catch(error){
+          console.info("[异常]:"+error);
           reject(error);
         }
       });
@@ -298,19 +298,23 @@ function dropItem(tableName){
 
   var self = this;
 
-  function _drop(tableName){
-    self._dbInfo.transaction(function (ts){
-      ts.executeSql('DROP TABLE ' + tableName);
-    },[], function (ts, result){
-      console.log('DROP TABLE ' + tableName);
-      return true;
-    }, function (t, error){
-      console.log('error' + error);
-      return false;
-    });
-  }
-  
-  _drop(tableName);
+  var promise = new Promise(function(resolve, reject){
+    try{
+      self._dbInfo.transaction(function (ts){
+        ts.executeSql('DROP TABLE ' + tableName);
+      },[], function (ts, result){
+        resolve(result);
+        // console.log('DROP TABLE ' + tableName);
+      }, function (t, error){
+        console.log('[异常]:' + error);
+        reject(error);
+      });
+    }
+    catch(err) {
+      reject(err);
+    }
+  });
+  return promise;
 }
 
 var webSQLStorage = {
