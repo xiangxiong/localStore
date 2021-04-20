@@ -1,6 +1,6 @@
 {
   "name": "localstores",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description": "跨端缓存的方案 -支持(小程序,h5,pc)",
   "main": "lib/index.umd.js",
   "module": "lib/index.esm.js",

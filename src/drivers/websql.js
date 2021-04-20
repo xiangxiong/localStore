@@ -156,6 +156,7 @@ function getItem(tableName){
             }
             resolve(rst);
           },function(ts, message) {
+              reject([]);
               console.info("查询数据失败！"+message);
           });
         }
